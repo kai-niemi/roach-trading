@@ -1,0 +1,7 @@
+──▄──▄────▄▀
+───▀▄─█─▄▀▄▄▄
+▄██▄████▄██▄▀█▄  P R O D U C T -- S E R V E R
+─▀▀─█▀█▀▄▀███▀   ${application.formatted-version} powered by Spring Boot ${spring-boot.formatted-version}
+──▄▄▀─█──▀▄▄
+
+

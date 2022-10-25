@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title th:text="${title}"></title>
+</head>
+
+<body>
+<p>
+    Welcome to Roach Trading
+</p>
+<ul>
+    <li>
+        <a th:href="@{/api}" >API Index</a>
+    </li>
+    <li>
+        <a th:href="@{https://localhost:8443/api}" > API Index (https)</a>
+    </li>
+</ul>
+</body>
+</html>

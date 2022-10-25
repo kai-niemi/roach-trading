@@ -1,0 +1,90 @@
+##################################
+# Spring boot properties
+# http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
+##################################
+spring:
+  application:
+    name: product-server
+  profiles:
+    active:
+  output:
+    ansi:
+      enabled: ALWAYS
+  jackson:
+    serialization:
+      indent_output: true
+      write_dates_as_timestamps: false
+    deserialization:
+      fail_on_unknown_properties: false
+      fail_on_ignored_properties: false
+    default-property-inclusion: non_null
+    locale: en_US
+  mvc:
+    throw-exception-if-no-handler-found: true
+  jpa:
+    show-sql: false
+    open-in-view: false
+    properties:
+      hibernate:
+        dialect: io.roach.product.util.CockroachDBDialect
+  flyway:
+    connect-retries: 10
+    enabled: true
+    clean-on-validation-error: true
+    baseline-on-migrate: false
+    locations: classpath:db/migration/crdb,classpath:db/migration/common
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: "jdbc:postgresql://localhost:26257/product?sslmode=disable&application_name=Roach Product"
+    username: root
+    password:
+    hikari:
+      pool-name: product-server
+      connection-init-sql: SELECT 1
+      maximum-pool-size: 40
+      minimum-idle: 20
+
+#############################
+logging:
+  pattern:
+    console: "%clr(%d{${LOG_DATEFORMAT_PATTERN:yyyy-MM-dd HH:mm:ss.SSS}}){faint} %clr(${LOG_LEVEL_PATTERN:%5p}) %clr([%logger{39}]){cyan} %m%n${LOG_EXCEPTION_CONVERSION_WORD:%wEx}"
+    file: "%d{${LOG_DATEFORMAT_PATTERN:yyyy-MM-dd HH:mm:ss.SSS}} ${LOG_LEVEL_PATTERN:%5p} [%t] %logger{39} : %m%n${LOG_EXCEPTION_CONVERSION_WORD:%wEx}"
+  file:
+    name: product-server.log
+#############################
+info:
+  build:
+    artifact: io.roach.product.server
+    name: Roach Product
+    description: Roach Product
+    version: 1.0.0
+    app-label: Roach Product
+#############################
+# https://docs.spring.io/spring-boot/docs/2.2.0.RELEASE/actuator-api//html/
+management:
+  endpoints:
+    enabled-by-default: true
+    web:
+      exposure:
+#        include: auditevents,caches,conditions,env,info,health,httptrace,metrics,threaddump,shutdown,liquibase,scheduledtasks,logfile,prometheus
+        include: env,health,metrics,flyway,prometheus
+      base-path: /actuator
+  endpoint:
+    health:
+      show-details: always
+  health:
+    defaults:
+      enabled: true
+    db:
+      enabled: true
+  metrics:
+    tags:
+      application: ${spring.application.name}
+#############################
+# HTTP API server (ServerProperties)
+server:
+  port: 8089
+  error:
+    whitelabel:
+      enabled: false
+    include-stacktrace: always

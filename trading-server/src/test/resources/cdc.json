@@ -1,0 +1,19 @@
+{
+    "payload": [
+        {
+            "after": {
+                "buy_price": 48.66,
+                "currency": "USD",
+                "id": "25425b6f-f0dd-4382-bd6d-ccea4ca13bec",
+                "reference": "p-4",
+                "sell_price": 46.51
+            },
+            "key": [
+                "25425b6f-f0dd-4382-bd6d-ccea4ca13bec"
+            ],
+            "topic": "product",
+            "updated": "1666266578499743608.0000000000"
+        }
+    ],
+    "length": 1
+}

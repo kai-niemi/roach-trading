@@ -1,0 +1,20 @@
+spring:
+  profiles:
+    active: default
+  output:
+    ansi:
+      enabled: always
+  http:
+    # Total concurrent http connections
+    maxTotal: -1
+    # Total concurrent http connections per route (endpoint)
+    defaultMaxPerRoute: -1
+logging:
+  file:
+    name: trading-client.log
+  pattern:
+    console: "%clr(%d{${LOG_DATEFORMAT_PATTERN:yyyy-MM-dd HH:mm:ss.SSS}}){faint} %clr(${LOG_LEVEL_PATTERN:%5p}) %clr([%logger{39}]){cyan} %m%n${LOG_EXCEPTION_CONVERSION_WORD:%wEx}"
+    file: "%d{${LOG_DATEFORMAT_PATTERN:yyyy-MM-dd HH:mm:ss.SSS}} ${LOG_LEVEL_PATTERN:%5p} [%t] %logger{39} : %m%n${LOG_EXCEPTION_CONVERSION_WORD:%wEx}"
+  logback:
+    rollingpolicy:
+      max-history: 3
