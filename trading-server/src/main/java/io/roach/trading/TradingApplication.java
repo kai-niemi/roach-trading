@@ -1,6 +1,5 @@
 package io.roach.trading;
 
-import io.roach.trading.util.ExcludeFromTest;
 import org.springframework.boot.Banner;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -12,6 +11,8 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
+
+import io.roach.trading.util.ExcludeFromTest;
 
 @Configuration
 @ConfigurationPropertiesScan(basePackageClasses = TradingApplication.class)

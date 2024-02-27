@@ -9,7 +9,13 @@ public class ProfileNames {
 
     public static final String CRDB_LOCAL = "crdb-local";
 
+    public static final String CRDB_LOCAL_RC = "crdb-local-rc";
+
     public static final String PSQL_DEV = "psql-dev";
+
+    public static final String PSQL_LOCAL = "psql-local";
+
+    public static final String PSQL_LOCAL_RC = "psql-local-rc";
 
     public static final String PSQL_DEV_RC = "psql-dev-rc";
 

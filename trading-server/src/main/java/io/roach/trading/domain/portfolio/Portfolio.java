@@ -35,12 +35,9 @@ public class Portfolio extends AbstractEntity<UUID> implements Iterable<Portfoli
     @JoinColumn(name = "account_id")
     private TradingAccount account;
 
-    @ElementCollection(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "portfolio_item",
-            joinColumns = @JoinColumn(name = "account_id")
-    )
-    @org.hibernate.annotations.Fetch(org.hibernate.annotations.FetchMode.SUBSELECT)
+    @ElementCollection
+    @CollectionTable(name = "portfolio_item", joinColumns = @JoinColumn(name = "account_id"))
+//    @org.hibernate.annotations.Fetch(org.hibernate.annotations.FetchMode.SUBSELECT)
     @OrderColumn(name = "item_pos")
     private List<PortfolioItem> items = new ArrayList<>();
 

@@ -83,6 +83,7 @@ create unique index on booking_order (reference)
 
 create unique index uidx_order_placed_at
     on booking_order (placed_at, id) storing (total_amount);
+
 alter table booking_order
     add constraint check_order_type_value check (order_type in ('BUY', 'SELL'));
 

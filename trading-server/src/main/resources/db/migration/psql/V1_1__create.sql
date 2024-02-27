@@ -9,6 +9,18 @@
 -- drop table if exists portfolio_item cascade;
 -- drop table if exists product cascade;
 
+create table limits
+(
+    name  varchar(64)    not null,
+    value numeric(19, 2) not null,
+
+    primary key (name)
+);
+
+-- drop sequence if exists account_seq;
+create sequence if not exists account_seq
+    increment by 50 cache 10;
+
 create table account
 (
     id               uuid           not null default gen_random_uuid(),
@@ -16,14 +28,12 @@ create table account
     balance          numeric(19, 2) not null,
     currency         varchar(3)     not null,
     account_type     varchar(15)    not null,
-    created_at       timestamptz    not null default clock_timestamp(),
+    created_at       timestamptz    null default clock_timestamp(),
     last_modified_at timestamptz,
     parent_id        uuid           null,
 
     primary key (id)
 );
-
-create sequence if not exists account_seq increment by 50 cache 10;
 
 create unique index uidx_account_name
     on account (name);
@@ -33,6 +43,24 @@ alter table account
 
 alter table account
     add constraint check_positive_balance check (balance >= 0);
+
+create table portfolio
+(
+    account_id  uuid not null,
+    description varchar(255),
+
+    primary key (account_id)
+);
+
+create table portfolio_item
+(
+    account_id uuid not null,
+    product_id uuid not null,
+    quantity   int4 not null,
+    item_pos   int  not null,
+
+    primary key (account_id, product_id, item_pos)
+);
 
 create table booking_order
 (
@@ -69,33 +97,19 @@ create table booking_order_item
     primary key (order_id, account_id)
 );
 
-create table portfolio
-(
-    account_id  uuid not null,
-    description varchar(255),
-
-    primary key (account_id)
-);
-
-create table portfolio_item
-(
-    id         uuid not null,
-    account_id uuid not null,
-    product_id uuid not null,
-    quantity   int4 not null,
-
-    primary key (id,account_id)
-);
 
 create sequence if not exists product_seq increment by 50 cache 10;
 
 create table product
 (
-    id         uuid           not null default gen_random_uuid(),
-    buy_price  numeric(19, 2) not null,
-    sell_price numeric(19, 2) not null,
-    currency   varchar(3)     not null,
-    reference  varchar(128)   not null,
+    id               uuid           not null default gen_random_uuid(),
+    foreign_id       uuid           null,
+    buy_price        numeric(19, 2) not null,
+    sell_price       numeric(19, 2) not null,
+    spread           numeric(19, 2) null,
+    currency         varchar(3)     not null,
+    reference        varchar(128)   not null,
+    last_modified_at timestamptz,
 
     primary key (id)
 );
