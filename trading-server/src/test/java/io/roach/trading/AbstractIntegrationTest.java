@@ -12,8 +12,8 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
-//@ActiveProfiles({ProfileNames.CRDB_DEV_RC, ProfileNames.VERBOSE})
-@ActiveProfiles({ProfileNames.CRDB_DEV, ProfileNames.VERBOSE})
+@ActiveProfiles({ProfileNames.CRDB_LOCAL})
+//@ActiveProfiles({ProfileNames.CRDB_LOCAL, ProfileNames.VERBOSE})
 @SpringBootTest(classes = TestApplication.class)
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)

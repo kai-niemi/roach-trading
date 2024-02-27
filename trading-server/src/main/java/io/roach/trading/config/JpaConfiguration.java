@@ -33,7 +33,7 @@ import java.util.Optional;
 @Configuration
 @EnableTransactionManagement(proxyTargetClass = true, order = AdvisorOrder.TX_ADVISOR)
 @EnableJpaRepositories(basePackageClasses = TradingApplication.class, enableDefaultTransactions = false)
-@EnableJpaAuditing(modifyOnCreate = false, auditorAwareRef = "auditorProvider")
+//@EnableJpaAuditing(modifyOnCreate = false, auditorAwareRef = "auditorProvider")
 public class JpaConfiguration {
     protected final Logger logger = LoggerFactory.getLogger(getClass());
 

@@ -12,10 +12,10 @@ import org.springframework.context.annotation.Profile;
  */
 @Configuration
 public class AopConfiguration {
-//    @Bean
-//    public TransactionRetryAspect retryableOperationAspect() {
-//        return new TransactionRetryAspect();
-//    }
+    @Bean
+    public TransactionRetryAspect retryableOperationAspect() {
+        return new TransactionRetryAspect();
+    }
 
 //    @Bean
 //    @Profile("!(" + ProfileNames.PSQL_DEV_RC + "," + ProfileNames.PSQL_DEV + ")")

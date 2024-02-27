@@ -32,11 +32,11 @@ import java.util.stream.IntStream;
 
 @Tag("stress")
 public class TradingStressTest extends AbstractIntegrationTest {
-    private static final int ORDERS_PER_THREAD = 1;
+    private static final int ORDERS_PER_THREAD = 15;
 
     private static final int QTY_PER_ORDER = 10;
 
-    private static final int NUM_THREADS = 4;//Runtime.getRuntime().availableProcessors() * 4;
+    private static final int NUM_THREADS = Runtime.getRuntime().availableProcessors() * 4;
 
     @Autowired
     private TradingFacade tradingFacade;
@@ -80,9 +80,6 @@ public class TradingStressTest extends AbstractIntegrationTest {
         Assertions.assertEquals(TestDoubles.USER_ACCOUNT_BOB,
                 accountService.getTradingAccountById(TestDoubles.USER_ACCOUNT_BOB, FetchType.EAGER).getPortfolio()
                         .getId());
-
-        Assertions.assertNotNull(accountService.getTradingAccountById(TestDoubles.USER_ACCOUNT_ALICE, FetchType.LAZY));
-        Assertions.assertNotNull(accountService.getTradingAccountById(TestDoubles.USER_ACCOUNT_BOB, FetchType.LAZY));
     }
 
     @Test
@@ -163,7 +160,6 @@ public class TradingStressTest extends AbstractIntegrationTest {
                         .multiply(NUM_THREADS);
 
         Assertions.assertEquals(accountTotalA.plus(accountTotalB), grossTotal);
-
 
         transactionTemplate.executeWithoutResult(transactionStatus -> {
             Assertions.assertEquals(TestDoubles.USER_INITIAL_BALANCE.minus(accountTotalA),

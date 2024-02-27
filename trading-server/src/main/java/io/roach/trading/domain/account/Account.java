@@ -77,4 +77,13 @@ public abstract class Account extends AbstractAuditableEntity<UUID> {
         this.balance = balance;
         return this;
     }
+
+    @Override
+    public String toString() {
+        return "Account{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", balance=" + balance +
+                "} " + super.toString();
+    }
 }

@@ -1,5 +1,3 @@
--- delete from account;
-
 insert into limits
 values ('buy', 0.95),
        ('sell', 1.05);
@@ -22,11 +20,7 @@ select md5(random()::text),
        'USD',
        'trading',
        'b1f78043-5c2d-40d8-b2fb-ded812f460dd'
-from generate_series(1, 5000) as n;
-
--- update account set balance=(select sum(balance) from account where parent_id='b1f78043-5c2d-40d8-b2fb-ded812f460dd')
---     where id='b1f78043-5c2d-40d8-b2fb-ded812f460dd';
--- select * from account where id='b1f78043-5c2d-40d8-b2fb-ded812f460dd';
+from generate_series(1, 50) as n;
 
 insert into account (name, balance, currency, account_type, parent_id)
 select md5(random()::text),
@@ -34,7 +28,7 @@ select md5(random()::text),
        'USD',
        'trading',
        '9db22e1d-d802-418e-991b-d6da1795bccb'
-from generate_series(1, 5000) as n;
+from generate_series(1, 50) as n;
 
 insert into account (name, balance, currency, account_type, parent_id)
 select md5(random()::text),
@@ -42,7 +36,7 @@ select md5(random()::text),
        'USD',
        'trading',
        '91e0daa0-b843-46f7-99d8-c3cc747e375f'
-from generate_series(1, 5000) as n;
+from generate_series(1, 50) as n;
 
 insert into account (name, balance, currency, account_type, parent_id)
 select md5(random()::text),
@@ -50,7 +44,7 @@ select md5(random()::text),
        'USD',
        'trading',
        'aac59922-6e5c-4dc2-82e5-1dc04308ba7b'
-from generate_series(1, 5000) as n;
+from generate_series(1, 50) as n;
 
 insert into account (name, balance, currency, account_type, parent_id)
 select md5(random()::text),
@@ -58,7 +52,7 @@ select md5(random()::text),
        'USD',
        'trading',
        '9018bb48-969d-474f-9e63-be03457bbbd3'
-from generate_series(1, 5000) as n;
+from generate_series(1, 50) as n;
 
 insert into account (name, balance, currency, account_type, parent_id)
 select md5(random()::text),
@@ -66,7 +60,7 @@ select md5(random()::text),
        'USD',
        'trading',
        '3786c84e-2add-4cba-89ec-5c38b1619f01'
-from generate_series(1, 5000) as n;
+from generate_series(1, 50) as n;
 
 insert into account (name, balance, currency, account_type, parent_id)
 select md5(random()::text),
@@ -74,7 +68,7 @@ select md5(random()::text),
        'USD',
        'trading',
        '76d3b46c-3692-4bc5-a7fc-43ee4ec04de2'
-from generate_series(1, 5000) as n;
+from generate_series(1, 50) as n;
 
 insert into account (name, balance, currency, account_type, parent_id)
 select md5(random()::text),
@@ -82,7 +76,7 @@ select md5(random()::text),
        'USD',
        'trading',
        'fdf73cf1-f0cc-4d65-82f2-a6a602e99a88'
-from generate_series(1, 5000) as n;
+from generate_series(1, 50) as n;
 
 insert into account (name, balance, currency, account_type, parent_id)
 select md5(random()::text),
@@ -90,7 +84,7 @@ select md5(random()::text),
        'USD',
        'trading',
        '57903f18-2768-4c05-b092-68b7f78d78c2'
-from generate_series(1, 5000) as n;
+from generate_series(1, 50) as n;
 
 insert into account (name, balance, currency, account_type, parent_id)
 select md5(random()::text),
@@ -98,7 +92,7 @@ select md5(random()::text),
        'USD',
        'trading',
        '1aecfd8d-3911-407f-8529-1fe644740f30'
-from generate_series(1, 5000) as n;
+from generate_series(1, 50) as n;
 
 -- ###########################################################
 
@@ -113,4 +107,4 @@ select 1.50 + random() * 2.50,
        2.75 + random() * 3.75,
        'USD',
        concat('product-', n::text)
-from generate_series(1, 15000) as n;
+from generate_series(1, 150) as n;

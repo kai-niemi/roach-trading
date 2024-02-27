@@ -1,6 +1,7 @@
 package io.roach.trading.aspect;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.UndeclaredThrowableException;
 import java.sql.SQLException;
 import java.time.Duration;
 import java.time.Instant;
@@ -15,8 +16,6 @@ import org.springframework.core.NestedExceptionUtils;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.core.annotation.Order;
 import org.springframework.dao.ConcurrencyFailureException;
-import org.springframework.dao.DataAccessException;
-import org.springframework.transaction.TransactionSystemException;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 import org.springframework.util.Assert;
 
@@ -77,38 +76,48 @@ public class TransactionRetryAspect {
         final Instant callTime = Instant.now();
 
         do {
+            final Throwable throwable;
+
             try {
                 numCalls++;
                 Object rv = pjp.proceed();
                 successCounter.increment();
                 if (numCalls > 1) {
-                    logger.debug(
-                            "Transient error recovered after " + numCalls + " of " + retryable
-                                    .retryAttempts() + " retries ("
-                                    + Duration.between(callTime, Instant.now()).toString() + ")");
+                    logger.info(
+                            "Transient error recovered after %d of %d retries (%s)"
+                                    .formatted(numCalls - 1,
+                                            retryable.retryAttempts(),
+                                            Duration.between(callTime, Instant.now()).toString()));
                 }
                 return rv;
-            } catch (DataAccessException | TransactionSystemException ex) { // TX abort on commit's
-                Throwable cause = NestedExceptionUtils.getMostSpecificCause(ex);
-                if (cause instanceof SQLException) {
-                    SQLException sqlException = (SQLException) cause;
-                    meterRegistry.counter("trade.txt.error." + sqlException.getSQLState()).increment();
-                    if ("40001".equals(sqlException.getSQLState())) { // Transient error code
-                        handleTransientException(sqlException, numCalls, pjp.getSignature().toShortString(),
-                                retryable.maxBackoff());
-                        continue;
-                    }
-                }
-
-                logger.error("Non-recoverable exception in retry loop", ex);
-
-                abortCounter.increment();
-                throw ex;
+            } catch (UndeclaredThrowableException ex) {
+                throwable = ex.getUndeclaredThrowable();
+            } catch (Exception ex) {
+                throwable = ex;
             }
+
+            Throwable cause = NestedExceptionUtils.getMostSpecificCause(throwable);
+            if (cause instanceof SQLException) {
+                SQLException sqlException = (SQLException) cause;
+                meterRegistry.counter("trade.txt.error." + sqlException.getSQLState()).increment();
+                if ("40001".equals(sqlException.getSQLState())) { // Transient error code
+                    handleTransientException(sqlException, numCalls, pjp.getSignature().toShortString(),
+                            retryable.maxBackoff());
+                    continue;
+                }
+            }
+
+            logger.error("Non-recoverable exception in retry loop", throwable);
+
+            abortCounter.increment();
+
+            throw throwable.fillInStackTrace();
+
         } while (numCalls < retryable.retryAttempts());
 
-        throw new ConcurrencyFailureException("Too many transient errors (" + numCalls + ") for method ["
-                + pjp.getSignature().toShortString() + "]. Giving up!");
+        throw new ConcurrencyFailureException(
+                "Too many transient errors (%d) for method [%s]. Giving up!"
+                        .formatted(numCalls, pjp.getSignature().toShortString()));
     }
 
     private void handleTransientException(SQLException ex, int numCalls, String method, long maxBackoff) {

@@ -28,7 +28,7 @@ create table account
     balance          numeric(19, 2) not null,
     currency         varchar(3)     not null,
     account_type     varchar(15)    not null,
-    created_at       timestamptz    not null default clock_timestamp(),
+    created_at       timestamptz    null default clock_timestamp(),
     last_modified_at timestamptz,
     parent_id        uuid           null,
 

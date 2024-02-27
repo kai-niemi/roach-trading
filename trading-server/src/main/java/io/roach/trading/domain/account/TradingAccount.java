@@ -69,4 +69,11 @@ public class TradingAccount extends Account {
     public Portfolio getPortfolio() {
         return portfolio;
     }
+
+    @Override
+    public String toString() {
+        return "TradingAccount{" +
+                ", parentAccountId=" + parentAccountId +
+                "} " + super.toString();
+    }
 }
