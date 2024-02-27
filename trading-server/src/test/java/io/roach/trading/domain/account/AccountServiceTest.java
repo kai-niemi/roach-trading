@@ -1,6 +1,6 @@
 package io.roach.trading.domain.account;
 
-import javax.persistence.FetchType;
+import jakarta.persistence.FetchType;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Order;

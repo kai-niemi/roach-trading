@@ -5,8 +5,6 @@ import java.sql.SQLException;
 import java.time.Duration;
 import java.time.Instant;
 
-import javax.annotation.PostConstruct;
-
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -18,6 +16,7 @@ import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.core.annotation.Order;
 import org.springframework.dao.ConcurrencyFailureException;
 import org.springframework.dao.DataAccessException;
+import org.springframework.transaction.TransactionSystemException;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 import org.springframework.util.Assert;
 
@@ -25,6 +24,7 @@ import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
 import io.roach.trading.annotation.AdvisorOrder;
 import io.roach.trading.annotation.Retryable;
+import jakarta.annotation.PostConstruct;
 
 /**
  * AOP aspect that applies retrys of failed transactions in the main business services.
@@ -88,7 +88,7 @@ public class RetryableOperationAspect {
                                     + Duration.between(callTime, Instant.now()).toString() + ")");
                 }
                 return rv;
-            } catch (DataAccessException ex) { // TX abort on commit's
+            } catch (DataAccessException | TransactionSystemException ex) { // TX abort on commit's
                 Throwable cause = NestedExceptionUtils.getMostSpecificCause(ex);
                 if (cause instanceof SQLException) {
                     SQLException sqlException = (SQLException) cause;

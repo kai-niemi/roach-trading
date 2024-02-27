@@ -66,7 +66,7 @@ public class Connect extends BaseCommand {
                 logger.warn(response.getBody());
             }
         } else {
-            logger.error("Connection failed: {}", entity.getStatusCode().getReasonPhrase());
+            logger.error("Connection failed: {}", entity.getStatusCode());
         }
     }
 

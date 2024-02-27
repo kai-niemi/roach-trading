@@ -3,8 +3,6 @@ package io.roach.product.web;
 import java.util.Currency;
 import java.util.concurrent.ThreadLocalRandom;
 
-import javax.annotation.PostConstruct;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +21,7 @@ import io.roach.product.domain.Product;
 import io.roach.product.service.ProductService;
 import io.roach.product.util.Money;
 import io.roach.product.util.RandomUtils;
+import jakarta.annotation.PostConstruct;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.afford;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;

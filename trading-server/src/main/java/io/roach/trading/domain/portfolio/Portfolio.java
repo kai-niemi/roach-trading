@@ -7,7 +7,7 @@ import java.util.Spliterator;
 import java.util.UUID;
 import java.util.function.Consumer;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 import org.springframework.hateoas.server.core.Relation;
 import org.springframework.util.Assert;

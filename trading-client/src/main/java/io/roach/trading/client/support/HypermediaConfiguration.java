@@ -66,15 +66,9 @@ public class HypermediaConfiguration {
     }
 
     @Bean
-    public RestTemplate restTemplate(HttpClient httpClient,
-                                     HypermediaRestTemplateConfigurer configurer) {
+    public RestTemplate restTemplate() {
         HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory();
-        factory.setHttpClient(httpClient);
-        factory.setBufferRequestBody(true);
-        factory.setReadTimeout(FIVE_MINUTES);
-
         RestTemplate restTemplate = new RestTemplate(factory);
-        configurer.registerHypermediaTypes(restTemplate);
         return restTemplate;
     }
 }

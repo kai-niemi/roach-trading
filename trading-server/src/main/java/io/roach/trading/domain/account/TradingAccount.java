@@ -2,7 +2,7 @@ package io.roach.trading.domain.account;
 
 import java.util.UUID;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 import org.springframework.hateoas.server.core.Relation;
 import org.springframework.util.Assert;

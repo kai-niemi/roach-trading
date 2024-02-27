@@ -2,7 +2,7 @@ package io.roach.trading.domain.account;
 
 import java.util.UUID;
 
-import javax.persistence.FetchType;
+import jakarta.persistence.FetchType;
 
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -3,7 +3,7 @@ package io.roach.trading.config;
 import java.util.Optional;
 import java.util.Properties;
 
-import javax.persistence.EntityManagerFactory;
+import jakarta.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
 import org.hibernate.cache.internal.NoCachingRegionFactory;

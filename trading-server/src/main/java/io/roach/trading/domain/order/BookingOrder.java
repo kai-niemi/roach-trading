@@ -6,7 +6,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 import org.springframework.hateoas.server.core.Relation;
 

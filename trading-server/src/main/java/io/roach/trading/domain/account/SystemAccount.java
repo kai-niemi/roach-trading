@@ -2,8 +2,8 @@ package io.roach.trading.domain.account;
 
 import java.util.UUID;
 
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
 
 import org.springframework.hateoas.server.core.Relation;
 

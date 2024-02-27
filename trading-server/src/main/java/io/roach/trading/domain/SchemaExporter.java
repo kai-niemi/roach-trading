@@ -12,9 +12,8 @@ import org.hibernate.boot.MetadataBuilder;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.model.naming.ImplicitNamingStrategyJpaCompliantImpl;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
-import org.hibernate.dialect.PostgreSQL10Dialect;
+import org.hibernate.dialect.PostgreSQLDialect;
 import org.hibernate.service.ServiceRegistry;
-import org.hibernate.tool.hbm2ddl.SchemaExport;
 import org.hibernate.tool.schema.TargetType;
 
 import io.roach.trading.domain.account.Account;
@@ -53,7 +52,7 @@ public class SchemaExporter {
                 } else if (arg.startsWith("--delimiter=")) {
                     delimiter = arg.substring(12);
                 } else if (arg.equalsIgnoreCase("--psql")) {
-                    dialect = PostgreSQL10Dialect.class;
+                    dialect = PostgreSQLDialect.class;
                 }
             } else {
                 try {
@@ -88,16 +87,16 @@ public class SchemaExporter {
             System.err.println("WARN: Unable to delete file " + outFile);
         }
 
-        SchemaExport schemaExport = new SchemaExport()
-                .setOutputFile(outFile.toString())
-                .setFormat(true)
-                .setHaltOnError(true)
-                .setDelimiter(delimiter);
-        if (drop) {
-            schemaExport.create(EnumSet.of(TargetType.SCRIPT), metadata);
-        } else {
-            schemaExport.createOnly(EnumSet.of(TargetType.SCRIPT), metadata);
-        }
+//        SchemaExport schemaExport = new SchemaExport()
+//                .setOutputFile(outFile.toString())
+//                .setFormat(true)
+//                .setHaltOnError(true)
+//                .setDelimiter(delimiter);
+//        if (drop) {
+//            schemaExport.create(EnumSet.of(TargetType.SCRIPT), metadata);
+//        } else {
+//            schemaExport.createOnly(EnumSet.of(TargetType.SCRIPT), metadata);
+//        }
 
         Files.copy(outFile, System.out);
     }

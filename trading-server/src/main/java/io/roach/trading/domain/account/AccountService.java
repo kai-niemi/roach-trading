@@ -2,7 +2,7 @@ package io.roach.trading.domain.account;
 
 import java.util.UUID;
 
-import javax.persistence.FetchType;
+import jakarta.persistence.FetchType;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
