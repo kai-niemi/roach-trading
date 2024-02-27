@@ -5,6 +5,8 @@ import java.lang.reflect.UndeclaredThrowableException;
 import java.sql.SQLException;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.TimeUnit;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -124,12 +126,15 @@ public class TransactionRetryAspect {
         retryCounter.increment();
 
         try {
-            long backoffMillis = Math.min((long) (Math.pow(2, numCalls) + Math.random() * 1000), maxBackoff);
+            long backoffMillis = Math.min((long) (Math.pow(2, numCalls)
+                    + ThreadLocalRandom.current().nextInt(1000)), maxBackoff);
+
             if (logger.isWarnEnabled()) {
                 logger.warn("Transient error detected (backoff {}ms) in call {} to '{}': {}",
                         backoffMillis, numCalls, method, ex.getMessage());
             }
-            Thread.sleep(backoffMillis);
+
+            TimeUnit.MILLISECONDS.sleep(backoffMillis);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }

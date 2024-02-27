@@ -16,10 +16,10 @@ public @interface Retryable {
     /**
      * @return number of times to retry aborted transient data access exceptions with exponential backoff (up to 5s per cycle). Zero or negative value disables retries.
      */
-    int retryAttempts() default 50;
+    int retryAttempts() default 30;
 
     /**
      * @return max backoff time in millis
      */
-    long maxBackoff() default 30000;
+    long maxBackoff() default 15000;
 }

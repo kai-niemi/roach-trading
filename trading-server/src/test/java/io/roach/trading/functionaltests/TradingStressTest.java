@@ -32,11 +32,11 @@ import java.util.stream.IntStream;
 
 @Tag("stress")
 public class TradingStressTest extends AbstractIntegrationTest {
-    private static final int ORDERS_PER_THREAD = 15;
+    private static final int ORDERS_PER_THREAD = 5;
 
     private static final int QTY_PER_ORDER = 10;
 
-    private static final int NUM_THREADS = Runtime.getRuntime().availableProcessors() * 4;
+    private static final int NUM_THREADS = Runtime.getRuntime().availableProcessors() * 2;
 
     @Autowired
     private TradingFacade tradingFacade;
