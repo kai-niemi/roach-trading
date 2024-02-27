@@ -19,7 +19,7 @@ import jakarta.annotation.PostConstruct;
 
 @Aspect
 @Order(AdvisorOrder.TX_ATTRIBUTES_ADVISOR)
-public class TransactionHintsAspect {
+public class TransactionDecoratorAspect {
     protected final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
@@ -38,7 +38,7 @@ public class TransactionHintsAspect {
 
         // Grab from type if needed (for non-annotated methods)
         if (transactionBoundary == null) {
-            transactionBoundary = RetryableOperationAspect.findAnnotation(pjp, TransactionBoundary.class);
+            transactionBoundary = TransactionRetryAspect.findAnnotation(pjp, TransactionBoundary.class);
         }
 
         if (!"(empty)".equals(transactionBoundary.applicationName())) {

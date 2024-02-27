@@ -35,7 +35,7 @@ spring:
     locations: classpath:db/migration/crdb,classpath:db/migration/common
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: "jdbc:postgresql://localhost:26257/product?sslmode=disable&application_name=Roach Product"
+    url: jdbc:postgresql://localhost:26257/product?sslmode=disable
     username: root
     password:
     hikari:

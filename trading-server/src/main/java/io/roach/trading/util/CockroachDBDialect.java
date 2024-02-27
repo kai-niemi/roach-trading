@@ -11,6 +11,11 @@ public class CockroachDBDialect extends CockroachDialect {
     }
 
     @Override
+    public String getReadLockString(String aliases, int timeout) {
+        return super.getForUpdateNowaitString(); // No FOR SHARE in 1SR
+    }
+
+    @Override
     public IdentityColumnSupport getIdentityColumnSupport() {
         return new CockroachDBIdentityColumnSupport();
     }
@@ -47,11 +52,6 @@ public class CockroachDBDialect extends CockroachDialect {
                 default:
                     return "not null default gen_random_uuid()";
             }
-        }
-
-        @Override
-        public boolean hasDataTypeInIdentityColumn() {
-            return true;
         }
 
         @Override

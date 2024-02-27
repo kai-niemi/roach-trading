@@ -61,7 +61,7 @@ public class OrderServiceImpl implements OrderService {
         Assert.notNull(request.getOrderRef(), "order ref is null");
 
         // Idempotency check
-        Optional<BookingOrder> order = orderRepository.getByReference(request.getOrderRef());
+        Optional<BookingOrder> order = orderRepository.findByReference(request.getOrderRef());
         if (order.isPresent()) {
             return order.get();
         }
@@ -71,10 +71,10 @@ public class OrderServiceImpl implements OrderService {
 
         validateOrder(request, product);
 
-        TradingAccount tradingAccount = tradingAccountRepository.getByIdWithLock(request.getBookingAccountId())
+        TradingAccount tradingAccount = tradingAccountRepository.findById(request.getBookingAccountId())
                 .orElseThrow(() -> new NoSuchTradingAccountException(request.getBookingAccountId()));
 
-        SystemAccount systemAccount = systemAccountRepository.getByIdWithLock(tradingAccount.getParentAccountId())
+        SystemAccount systemAccount = systemAccountRepository.findById(tradingAccount.getParentAccountId())
                 .orElseThrow(() -> new NoSuchSystemAccountException(tradingAccount.getParentAccountId(),
                         tradingAccount.getId()));
 
@@ -212,7 +212,8 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public BookingOrder getOrderByRef(String orderRef) {
-        return orderRepository.getByReference(orderRef).orElseThrow(() -> new NoSuchOrderException(orderRef));
+        return orderRepository.findByReference(
+                orderRef).orElseThrow(() -> new NoSuchOrderException(orderRef));
     }
 
     @Override

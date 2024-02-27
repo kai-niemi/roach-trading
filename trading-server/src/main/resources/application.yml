@@ -3,6 +3,8 @@
 # http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 ##################################
 spring:
+  #    allow-circular-references: true
+  #    allow-bean-definition-overriding: true
   application:
     name: trading-server
   profiles:
@@ -19,33 +21,49 @@ spring:
       fail_on_ignored_properties: false
     default-property-inclusion: non_null
     locale: en_US
-  mvc:
-    throw-exception-if-no-handler-found: true
+#  mvc:
+#    throw-exception-if-no-handler-found: true
+  flyway:
+    enabled: true
+    clean-on-validation-error: true
+    baseline-on-migrate: true
+    clean-disabled: false
+    connect-retries: 10
+    locations: classpath:db/migration/crdb,classpath:db/migration/common
   jpa:
     show-sql: false
     open-in-view: false
     properties:
       hibernate:
         dialect: io.roach.trading.util.CockroachDBDialect
-  flyway:
-    connect-retries: 10
-    enabled: true
-    clean-on-validation-error: true
-    baseline-on-migrate: false
-    locations: classpath:db/migration/crdb,classpath:db/migration/common
+        connection:
+          # inverse of hikari->auto-commit
+          provider_disables_autocommit: true
+        jdbc:
+          lob:
+            non_contextual_creation: true
+#          batch_size: 256
+#          fetch_size: 256
+          batch_versioned_data: true
+#        order_inserts: true
+#        order_updates: true
+        hql:
+          bulk_id_strategy: org.hibernate.hql.spi.id.inline.CteValuesListBulkIdStrategy
+        cache:
+          use_minimal_puts: true
+          use_second_level_cache: false
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: "jdbc:postgresql://localhost:26257/trading?sslmode=disable&application_name=Roach Trading"
     username: root
     password:
     hikari:
+      # inverse of provider_disables_autocommit
+      auto-commit: false
       pool-name: trading-server
       connection-init-sql: SELECT 1
+      initialization-fail-timeout: -1
       maximum-pool-size: 40
       minimum-idle: 20
-  main:
-#    allow-circular-references: true
-    allow-bean-definition-overriding: true
 
 #############################
 logging:
@@ -86,8 +104,6 @@ management:
 ########################################################
 # HTTP and HTTPS with self-signed cert for webhook sink
 server:
-  http:
-    port: 8090
   port: 8443
   error:
     whitelabel:

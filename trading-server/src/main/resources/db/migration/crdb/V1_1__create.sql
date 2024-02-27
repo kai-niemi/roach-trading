@@ -78,8 +78,9 @@ create table booking_order
     primary key (id)
 );
 
-create unique index uidx_order_reference
-    on booking_order (reference);
+create unique index on booking_order (reference)
+    storing (approved_at, order_type, placed_at, quantity, total_amount, total_currency, account_id, product_id);
+
 create unique index uidx_order_placed_at
     on booking_order (placed_at, id) storing (total_amount);
 alter table booking_order

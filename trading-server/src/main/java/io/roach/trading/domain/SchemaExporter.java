@@ -1,21 +1,5 @@
 package io.roach.trading.domain;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.EnumSet;
-
-import org.hibernate.boot.Metadata;
-import org.hibernate.boot.MetadataBuilder;
-import org.hibernate.boot.MetadataSources;
-import org.hibernate.boot.model.naming.ImplicitNamingStrategyJpaCompliantImpl;
-import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
-import org.hibernate.dialect.PostgreSQLDialect;
-import org.hibernate.service.ServiceRegistry;
-import org.hibernate.tool.schema.TargetType;
-
 import io.roach.trading.domain.account.Account;
 import io.roach.trading.domain.order.BookingOrder;
 import io.roach.trading.domain.order.BookingOrderItem;
@@ -23,6 +7,19 @@ import io.roach.trading.domain.portfolio.Portfolio;
 import io.roach.trading.domain.portfolio.PortfolioItem;
 import io.roach.trading.domain.product.Product;
 import io.roach.trading.util.CockroachDBDialect;
+import org.hibernate.boot.Metadata;
+import org.hibernate.boot.MetadataBuilder;
+import org.hibernate.boot.MetadataSources;
+import org.hibernate.boot.model.naming.ImplicitNamingStrategyJpaCompliantImpl;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+import org.hibernate.dialect.PostgreSQLDialect;
+import org.hibernate.service.ServiceRegistry;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Arrays;
 
 public class SchemaExporter {
     public static Class[] ENTITY_TYPES = {

@@ -1,25 +1,20 @@
 package io.roach.trading.domain.account;
 
+import io.roach.trading.AbstractIntegrationTest;
+import io.roach.trading.api.support.Money;
+import io.roach.trading.doubles.TestDoubles;
 import jakarta.persistence.FetchType;
-
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.Commit;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
-
-import io.roach.trading.AbstractIntegrationTest;
-import io.roach.trading.ProfileNames;
-import io.roach.trading.api.support.Money;
-import io.roach.trading.doubles.TestDoubles;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@ActiveProfiles({ProfileNames.CRDB_TEST, ProfileNames.VERBOSE})
 public class AccountServiceTest extends AbstractIntegrationTest {
     @Autowired
     private AccountService accountService;

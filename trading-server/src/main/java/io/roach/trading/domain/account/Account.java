@@ -1,17 +1,24 @@
 package io.roach.trading.domain.account;
 
-import java.util.UUID;
-
-import jakarta.persistence.*;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.roach.trading.api.support.Money;
+import io.roach.trading.domain.common.AbstractAuditableEntity;
+import jakarta.persistence.AttributeOverride;
+import jakarta.persistence.AttributeOverrides;
+import jakarta.persistence.Column;
+import jakarta.persistence.DiscriminatorColumn;
+import jakarta.persistence.DiscriminatorType;
+import jakarta.persistence.Embedded;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
+import jakarta.persistence.Table;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.util.Assert;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import io.roach.trading.api.support.Money;
-import io.roach.trading.domain.common.AbstractAuditableEntity;
+import java.util.UUID;
 
 @Entity
 @Table(name = "account")

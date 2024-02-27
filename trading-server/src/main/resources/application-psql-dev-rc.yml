@@ -10,4 +10,4 @@ spring:
     username: postgres
     password: root
     hikari:
-      transaction-isolation: TRANSACTION_SERIALIZABLE
+      transaction-isolation: TRANSACTION_READ_COMMITTED

@@ -13,10 +13,6 @@ import static io.roach.trading.api.support.Money.euro;
 public abstract class TestDoubles {
     public static final UUID SYSTEM_ACCOUNT_A = UUID.randomUUID();
 
-    public static final UUID SYSTEM_ACCOUNT_B = UUID.randomUUID();
-
-    public static final UUID SYSTEM_ACCOUNT_C = UUID.randomUUID();
-
     public static final UUID USER_ACCOUNT_ALICE = UUID.randomUUID();
 
     public static final UUID USER_ACCOUNT_BOB = UUID.randomUUID();

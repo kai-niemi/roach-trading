@@ -37,9 +37,11 @@
                 </exclusion>
             </exclusions>
         </dependency>
+        <!-- https://github.com/spring-projects/spring-boot/issues/33044 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-jetty</artifactId>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

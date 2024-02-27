@@ -31,11 +31,11 @@ import static io.roach.trading.client.support.HypermediaClient.withCurie;
 @ShellCommandGroup("workload")
 public class PlaceOrder extends BaseCommand {
     public static final ParameterizedTypeReference<CollectionModel<BookingAccountModel>> ACCOUNT_MODEL_PTR
-            = new ParameterizedTypeReference<CollectionModel<BookingAccountModel>>() {
+            = new ParameterizedTypeReference<>() {
     };
 
     public static final ParameterizedTypeReference<CollectionModel<ProductModel>> PRODUCT_MODEL_PTR
-            = new ParameterizedTypeReference<CollectionModel<ProductModel>>() {
+            = new ParameterizedTypeReference<>() {
     };
 
     @Autowired

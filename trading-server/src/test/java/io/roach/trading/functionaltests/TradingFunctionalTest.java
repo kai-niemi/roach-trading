@@ -1,18 +1,17 @@
 package io.roach.trading.functionaltests;
 
+import io.roach.trading.AbstractIntegrationTest;
+import io.roach.trading.api.OrderRequest;
+import io.roach.trading.domain.account.AccountService;
+import io.roach.trading.domain.order.BookingOrder;
+import io.roach.trading.domain.order.OrderService;
+import io.roach.trading.domain.portfolio.PortfolioService;
+import io.roach.trading.doubles.TestDoubles;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
-
-import io.roach.trading.AbstractIntegrationTest;
-import io.roach.trading.domain.account.AccountService;
-import io.roach.trading.domain.order.BookingOrder;
-import io.roach.trading.api.OrderRequest;
-import io.roach.trading.domain.order.OrderService;
-import io.roach.trading.domain.portfolio.PortfolioService;
-import io.roach.trading.doubles.TestDoubles;
 
 import static io.roach.trading.doubles.TestDoubles.USER_INITIAL_BALANCE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -29,7 +28,9 @@ public class TradingFunctionalTest extends AbstractIntegrationTest {
 
     @BeforeAll
     public void setupTest() {
+        logger.info("Removing test doubles..");
         doublesService.removeTestDoubles();
+        logger.info("Creating test doubles..");
         doublesService.createTestDoubles();
     }
 

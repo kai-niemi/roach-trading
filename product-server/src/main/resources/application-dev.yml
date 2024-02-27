@@ -1,5 +1,5 @@
 spring:
   datasource:
-    url: "jdbc:postgresql://192.168.1.99:26257/product?sslmode=disable&application_name=Roach Product"
+    url: jdbc:postgresql://192.168.1.99:26257/product?sslmode=disable
     username: root
     password:

@@ -1,5 +1,6 @@
 package io.roach.trading;
 
+import io.roach.trading.doubles.DoublesService;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.TestInstance;
@@ -11,14 +12,12 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
-import io.roach.trading.doubles.DoublesService;
-
+//@ActiveProfiles({ProfileNames.CRDB_DEV_RC, ProfileNames.VERBOSE})
+@ActiveProfiles({ProfileNames.CRDB_DEV, ProfileNames.VERBOSE})
 @SpringBootTest(classes = TestApplication.class)
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-//@ActiveProfiles({ProfileNames.PSQL_TEST})
-@ActiveProfiles({ProfileNames.CRDB_TEST})
 @Tag("integration")
 public abstract class AbstractIntegrationTest {
     protected final Logger logger = LoggerFactory.getLogger(getClass());

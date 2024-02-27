@@ -44,7 +44,7 @@ public class PortfolioServiceTest extends AbstractIntegrationTest {
     @Order(2)
     public void whenFindingPortfolio_thenThrowNoSuchPortfolioException() {
         Assertions.assertThrows(NoSuchPortfolioException.class, () -> {
-            portfolioService.getPortfolioById(TestDoubles.SYSTEM_ACCOUNT_B);
+            portfolioService.getPortfolioById(TestDoubles.SYSTEM_ACCOUNT_A);
             Assertions.fail("Must not succeed");
         });
     }

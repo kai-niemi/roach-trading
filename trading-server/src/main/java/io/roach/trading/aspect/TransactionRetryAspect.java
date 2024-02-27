@@ -37,7 +37,7 @@ import jakarta.annotation.PostConstruct;
  */
 @Aspect
 @Order(AdvisorOrder.TX_RETRY_ADVISOR)
-public class RetryableOperationAspect {
+public class TransactionRetryAspect {
     public static <A extends Annotation> A findAnnotation(ProceedingJoinPoint pjp, Class<A> annotationType) {
         return AnnotationUtils
                 .findAnnotation(pjp.getSignature().getDeclaringType(), annotationType);
@@ -63,7 +63,7 @@ public class RetryableOperationAspect {
 
     @Around(value = "Pointcuts.retryableBoundaryOperation(retryable)",
             argNames = "pjp,retryable")
-    public Object doInTransaction(ProceedingJoinPoint pjp, Retryable retryable)
+    public Object doAroundRetryable(ProceedingJoinPoint pjp, Retryable retryable)
             throws Throwable {
         Assert.isTrue(!TransactionSynchronizationManager.isActualTransactionActive(), "tx active");
 
@@ -116,7 +116,7 @@ public class RetryableOperationAspect {
 
         try {
             long backoffMillis = Math.min((long) (Math.pow(2, numCalls) + Math.random() * 1000), maxBackoff);
-            if (numCalls <= 1 && logger.isWarnEnabled()) {
+            if (logger.isWarnEnabled()) {
                 logger.warn("Transient error detected (backoff {}ms) in call {} to '{}': {}",
                         backoffMillis, numCalls, method, ex.getMessage());
             }

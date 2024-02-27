@@ -2,7 +2,7 @@ spring:
   jpa:
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.PostgreSQL10Dialect
+        dialect: org.hibernate.dialect.PostgresDialect
   flyway:
     locations: classpath:db/migration/psql,classpath:db/migration/common
   datasource:
@@ -10,6 +10,4 @@ spring:
     username: postgres
     password: root
     hikari:
-#      transaction-isolation: TRANSACTION_READ_COMMITTED
-#      transaction-isolation: TRANSACTION_REPEATABLE_READ
       transaction-isolation: TRANSACTION_SERIALIZABLE

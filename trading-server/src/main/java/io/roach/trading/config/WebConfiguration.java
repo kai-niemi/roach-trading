@@ -1,10 +1,11 @@
 package io.roach.trading.config;
 
-import java.time.format.DateTimeFormatter;
-import java.util.Currency;
-import java.util.List;
-import java.util.Locale;
-
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import io.roach.trading.api.support.Money;
+import io.roach.trading.domain.home.LinkRelations;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -25,21 +26,19 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
-
-import io.roach.trading.api.support.Money;
-import io.roach.trading.domain.home.LinkRelations;
+import java.time.format.DateTimeFormatter;
+import java.util.Currency;
+import java.util.List;
+import java.util.Locale;
 
 @Configuration
-@EnableHypermediaSupport(type = {
-        EnableHypermediaSupport.HypermediaType.HAL_FORMS, EnableHypermediaSupport.HypermediaType.HAL})
-@EnableSpringDataWebSupport
 @EnableWebMvc
+@EnableSpringDataWebSupport
+@EnableHypermediaSupport(type = {
+        EnableHypermediaSupport.HypermediaType.HAL_FORMS,
+        EnableHypermediaSupport.HypermediaType.HAL
+})
 public class WebConfiguration implements WebMvcConfigurer {
     public static LocalDateTimeSerializer ISO_DATETIME_SERIALIZER
             = new LocalDateTimeSerializer(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
@@ -81,7 +80,9 @@ public class WebConfiguration implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("*");
+                .allowedMethods("GET", "POST", "PUT", "DELETE")
+                .allowedOrigins("*")
+                .allowedHeaders("*");
     }
 
     @Override
@@ -99,7 +100,7 @@ public class WebConfiguration implements WebMvcConfigurer {
         }
         if (!registry.hasMappingForPattern("/browser/**")) {
             registry.addResourceHandler("/browser/**").addResourceLocations(
-                    "/webjars/hal-explorer/1.1.0/");
+                    "/webjars/hal-explorer/1.2.1/");
         }
     }
 
@@ -110,7 +111,6 @@ public class WebConfiguration implements WebMvcConfigurer {
                 .defaultContentType(
                         MediaTypes.HAL_FORMS_JSON,
                         MediaTypes.HAL_JSON,
-//                        MediaTypes.VND_ERROR_JSON,
                         MediaType.APPLICATION_JSON,
                         MediaType.APPLICATION_PROBLEM_JSON,
                         MediaType.ALL);
@@ -124,11 +124,6 @@ public class WebConfiguration implements WebMvcConfigurer {
 
     @Bean
     public CurieProvider defaultCurieProvider() {
-        String uri = ServletUriComponentsBuilder.newInstance()
-                .scheme("http")
-                .host("localhost")
-                .pathSegment("rels", "{rel}.html")
-                .build().toUriString();
-        return new DefaultCurieProvider(LinkRelations.CURIE_NAMESPACE, UriTemplate.of(uri));
+        return new DefaultCurieProvider(LinkRelations.CURIE_NAMESPACE, UriTemplate.of("/rels/{rel}"));
     }
 }

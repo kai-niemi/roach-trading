@@ -1,37 +1,46 @@
 package io.roach.trading;
 
+import io.roach.trading.util.ExcludeFromTest;
+import org.hibernate.engine.jdbc.connections.internal.ConnectionProviderInitiator;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.ApplicationArguments;
+import org.springframework.boot.ApplicationRunner;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.data.jdbc.JdbcRepositoriesAutoConfiguration;
+import org.springframework.boot.autoconfigure.data.rest.RepositoryRestMvcAutoConfiguration;
+import org.springframework.boot.autoconfigure.hateoas.HypermediaAutoConfiguration;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
+import org.springframework.boot.autoconfigure.web.servlet.WebMvcAutoConfiguration;
+import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.datasource.DataSourceUtils;
+
+import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import javax.sql.DataSource;
-
-import org.hibernate.engine.jdbc.connections.internal.ConnectionProviderInitiator;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.ApplicationArguments;
-import org.springframework.boot.ApplicationRunner;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
-import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.dao.DataAccessException;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.datasource.DataSourceUtils;
-
-import io.roach.trading.util.ExcludeFromTest;
-
 @Configuration
-@EnableAutoConfiguration(exclude = {
+@ConfigurationPropertiesScan(basePackageClasses = TradingApplication.class)
+@SpringBootApplication(exclude = {
+        JdbcRepositoriesAutoConfiguration.class,
+        DataSourceAutoConfiguration.class,
         SecurityAutoConfiguration.class,
-        DataSourceAutoConfiguration.class
+        RepositoryRestMvcAutoConfiguration.class,
+        WebMvcAutoConfiguration.class,
+        HypermediaAutoConfiguration.class
 })
-@EntityScan(basePackageClasses = TradingApplication.class)
-@ComponentScan(basePackages = "io.roach.trading",
-        excludeFilters = {@ComponentScan.Filter(classes = ExcludeFromTest.class)})
+@EnableAspectJAutoProxy(proxyTargetClass = true)
+//@EntityScan(basePackageClasses = TradingApplication.class)
+//@ComponentScan(basePackages = "io.roach.trading",
+//        excludeFilters = {@ComponentScan.Filter(classes = ExcludeFromTest.class)})
 public class TestApplication implements ApplicationRunner {
     @Autowired
     private DataSource dataSource;

@@ -1,0 +1,7 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:26257/trading?sslmode=disable
+    username: root
+    password:
+    hikari:
+      transaction-isolation: TRANSACTION_SERIALIZABLE

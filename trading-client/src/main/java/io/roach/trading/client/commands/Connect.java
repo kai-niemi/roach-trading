@@ -22,7 +22,7 @@ import io.roach.trading.client.support.ConnectionUpdatedEvent;
 @ShellComponent
 @ShellCommandGroup("admin")
 public class Connect extends BaseCommand {
-    public static final String DEFAULT_URL = "http://localhost:8090/api/";
+    public static final String DEFAULT_URL = "https://localhost:8443/api/";
 
     private static boolean connected;
 

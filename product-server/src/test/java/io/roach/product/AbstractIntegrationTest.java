@@ -13,7 +13,7 @@ import org.springframework.test.context.ActiveProfiles;
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-@ActiveProfiles({ProfileNames.CRDB_TEST})
+@ActiveProfiles({ProfileNames.CRDB_DEV})
 public abstract class AbstractIntegrationTest {
     protected final Logger logger = LoggerFactory.getLogger(getClass());
 }
