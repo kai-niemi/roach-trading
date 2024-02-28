@@ -13,7 +13,6 @@ import io.roach.trading.annotation.TransactionMandatory;
 import io.roach.trading.api.support.Money;
 import io.roach.trading.domain.portfolio.Portfolio;
 import io.roach.trading.domain.portfolio.PortfolioRepository;
-import jakarta.persistence.FetchType;
 
 @Service
 @TransactionMandatory
@@ -40,8 +39,17 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public TradingAccount createTradingAccount(UUID parentAccountId, UUID tradingAccountId, String name,
+    public TradingAccount createTradingAccount(UUID systemAccountId, UUID tradingAccountId, String name,
                                                Money balance) {
+        return createTradingAccount(systemAccountId, tradingAccountId, name, balance, true);
+    }
+
+    @Override
+    public TradingAccount createTradingAccount(UUID parentAccountId,
+                                               UUID tradingAccountId,
+                                               String name,
+                                               Money balance,
+                                               boolean withPortfolio) {
         Assert.isTrue(TransactionSynchronizationManager.isActualTransactionActive(), "wrong tx state");
 
         Assert.notNull(parentAccountId, "parentAccountId");
@@ -55,9 +63,11 @@ public class AccountServiceImpl implements AccountService {
         TradingAccount tradingAccount = new TradingAccount(tradingAccountId, name, balance, parentAccount);
         tradingAccountRepository.save(tradingAccount);
 
-        Portfolio portfolio = tradingAccount.createPortfolio();
-        portfolio.setDescription("Portfolio for " + tradingAccount.getName());
-        portfolioRepository.save(portfolio);
+        if (withPortfolio) {
+            Portfolio portfolio = tradingAccount.createPortfolio();
+            portfolio.setDescription("Portfolio for " + tradingAccount.getName());
+            portfolioRepository.save(portfolio);
+        }
 
         return tradingAccount;
     }

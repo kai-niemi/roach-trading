@@ -28,7 +28,6 @@ import io.roach.trading.domain.account.SystemAccountRepository;
 import io.roach.trading.domain.account.TradingAccount;
 import io.roach.trading.domain.account.TradingAccountRepository;
 import io.roach.trading.domain.portfolio.Portfolio;
-import io.roach.trading.domain.portfolio.PortfolioRepository;
 import io.roach.trading.domain.product.NoSuchProductException;
 import io.roach.trading.domain.product.Product;
 import io.roach.trading.domain.product.ProductRepository;
@@ -52,9 +51,6 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private ProductRepository productRepository;
-
-    @Autowired
-    private PortfolioRepository portfolioRepository;
 
     @Override
     public BookingOrder placeOrder(OrderRequest request) {
@@ -80,9 +76,7 @@ public class OrderServiceImpl implements OrderService {
                 .orElseThrow(() -> new NoSuchSystemAccountException(tradingAccount.getParentAccountId(),
                         tradingAccount.getId()));
 
-        Portfolio portfolio = tradingAccount.getPortfolio();
-
-        updatePortfolio(request, product, portfolio);
+        updatePortfolio(request, product, tradingAccount.getPortfolio());
 
         return createOrder(request, product, tradingAccount, systemAccount);
     }
@@ -115,6 +109,9 @@ public class OrderServiceImpl implements OrderService {
     }
 
     private void updatePortfolio(OrderRequest request, Product product, Portfolio portfolio) {
+        if (portfolio == null) {
+            return;
+        }
         switch (request.getOrderType()) {
             case BUY:
                 Assert.isTrue(request.getQuantity() > 0, "Negative quantity");

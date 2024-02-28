@@ -19,7 +19,7 @@ import jakarta.persistence.ManyToOne;
 @Relation(value = LinkRelations.PORTFOLIO_ITEM_REL,
         collectionRelation = LinkRelations.PORTFOLIO_ITEMS_REL)
 public class PortfolioItem {
-    @ManyToOne//(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", nullable = false, updatable = false)
     @Fetch(FetchMode.JOIN)
     private Product product;

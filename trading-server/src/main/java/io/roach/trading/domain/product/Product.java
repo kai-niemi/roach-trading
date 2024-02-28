@@ -115,13 +115,12 @@ public class Product extends AbstractEntity<UUID> {
             return false;
         }
         Product product = (Product) o;
-        return id.equals(product.id) &&
-                reference.equals(product.reference);
+        return id.equals(product.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, reference);
+        return Objects.hash(id);
     }
 
     @Override

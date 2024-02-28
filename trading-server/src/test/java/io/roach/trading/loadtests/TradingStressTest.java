@@ -2,6 +2,7 @@ package io.roach.trading.loadtests;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutionException;
@@ -22,6 +23,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.util.Pair;
 import org.springframework.test.annotation.Commit;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,8 +48,8 @@ import io.roach.trading.util.RandomData;
 import static io.roach.trading.api.support.Money.euro;
 
 //@ActiveProfiles({ProfileNames.PSQL_LOCAL_RC})
-@ActiveProfiles({ProfileNames.PSQL_LOCAL})
-//@ActiveProfiles({ProfileNames.CRDB_LOCAL_RC})
+//@ActiveProfiles({ProfileNames.PSQL_LOCAL})
+@ActiveProfiles({ProfileNames.CRDB_LOCAL_RC})
 //@ActiveProfiles({ProfileNames.CRDB_LOCAL})
 @Tag("stress")
 public class TradingStressTest extends AbstractIntegrationTest {
@@ -99,7 +101,8 @@ public class TradingStressTest extends AbstractIntegrationTest {
                         "TRADER:" + value, TestDoubles.TRADER_INITIAL_BALANCE);
                 IntStream.rangeClosed(1, NUM_TRADING_ACCOUNTS_PER_SYSTEM_ACCOUNT).forEach(x -> {
                     accountService.createTradingAccount(tradingId, UUID.randomUUID(),
-                            "USER:" + userId.incrementAndGet(), TestDoubles.USER_INITIAL_BALANCE);
+                            "USER:" + userId.incrementAndGet(), TestDoubles.USER_INITIAL_BALANCE,
+                            false);
                 });
             });
 
@@ -160,7 +163,8 @@ public class TradingStressTest extends AbstractIntegrationTest {
 
         List<Future<Money>> buyOrders = new ArrayList<>();
 
-        BlockingQueue<UUID> tradingAccountIdsWithBuyOrders = new LinkedBlockingDeque<>();
+        BlockingQueue<Pair<UUID, Pair<Product, Integer>>> tradingAccountIdsWithBuyOrders
+                = new LinkedBlockingDeque<>();
 
         // Place buy orders
         IntStream.rangeClosed(1, BUY_ORDERS).forEach(value -> {
@@ -179,7 +183,8 @@ public class TradingStressTest extends AbstractIntegrationTest {
                                 .build()
                 );
 
-                tradingAccountIdsWithBuyOrders.add(tradingAccount.getId());
+                Pair<Product, Integer> tuple = Pair.of(tradingProduct, qty);
+                tradingAccountIdsWithBuyOrders.add(Pair.of(Objects.requireNonNull(tradingAccount.getId()), tuple));
 
                 return order.getTotalPrice();
             });
@@ -191,12 +196,13 @@ public class TradingStressTest extends AbstractIntegrationTest {
         // Place sell orders until drained
         for (; ; ) {
             try {
-                UUID tradingAccountId = tradingAccountIdsWithBuyOrders.poll(5, TimeUnit.SECONDS);
-                if (tradingAccountId == null) {
+                Pair<UUID, Pair<Product, Integer>> tuple = tradingAccountIdsWithBuyOrders.poll(5, TimeUnit.SECONDS);
+                if (tuple == null) {
                     break;
                 }
                 Future<Money> future = executorService.submit(() -> {
-                    List<BookingOrder> orders = tradingFacade.placeSellOrdersForAllHoldings(tradingAccountId);
+                    List<BookingOrder> orders = tradingFacade.placeSellOrdersForHoldings(tuple.getFirst(),
+                            tuple.getSecond());
 
                     Money sellTotal = Money.zero(Money.EUR);
                     for (BookingOrder order : orders) {
@@ -230,7 +236,6 @@ public class TradingStressTest extends AbstractIntegrationTest {
                 Assertions.fail(e.getCause());
             }
         }
-
 
         Money sellTotal = Money.zero(Money.EUR);
         int sellOrderFutures = 0;
@@ -281,9 +286,11 @@ public class TradingStressTest extends AbstractIntegrationTest {
         logger.info("System accounts final total: %s".formatted(finalSystemAccountsTotal));
         logger.info("Trading accounts final total: %s".formatted(finalTradingAccountsTotal));
 
-        Assertions.assertEquals(initialSystemAccountsTotal.plus(finalBuyTotal).minus(finalSellTotal), finalSystemAccountsTotal,
+        Assertions.assertEquals(initialSystemAccountsTotal.plus(finalBuyTotal).minus(finalSellTotal),
+                finalSystemAccountsTotal,
                 "System accounts total discrepancy");
-        Assertions.assertEquals(initialTradingAccountsTotal.minus(finalBuyTotal).plus(finalSellTotal), finalTradingAccountsTotal,
+        Assertions.assertEquals(initialTradingAccountsTotal.minus(finalBuyTotal).plus(finalSellTotal),
+                finalTradingAccountsTotal,
                 "Trading accounts total discrepancy");
     }
 }

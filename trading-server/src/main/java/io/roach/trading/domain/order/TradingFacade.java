@@ -8,6 +8,7 @@ import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 
 import io.roach.trading.annotation.Retryable;
@@ -59,6 +60,28 @@ public class TradingFacade {
                 orderList.add(orderService.placeOrder(orderRequest));
             }
         });
+
+        return orderList;
+    }
+
+    @TransactionBoundary
+    @Retryable
+    public List<BookingOrder> placeSellOrdersForHoldings(UUID tradingAccountId,
+                                                         Pair<Product, Integer> pair) {
+        TradingAccount tradingAccount =
+                accountService.getTradingAccountById(tradingAccountId, true);
+
+        List<BookingOrder> orderList = new ArrayList<>();
+
+        OrderRequest orderRequest = OrderRequest.builder()
+                .bookingAccount(tradingAccount.getId())
+                .sell(pair.getFirst().getReference())
+                .unitPrice(pair.getFirst().getSellPrice())
+                .quantity(pair.getSecond())
+                .ref(UUID.randomUUID().toString())
+                .build();
+
+        orderList.add(orderService.placeOrder(orderRequest));
 
         return orderList;
     }

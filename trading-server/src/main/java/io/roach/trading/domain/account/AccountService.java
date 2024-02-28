@@ -32,6 +32,8 @@ public interface AccountService {
      */
     TradingAccount createTradingAccount(UUID systemAccountId, UUID tradingAccountId, String name, Money balance);
 
+    TradingAccount createTradingAccount(UUID systemAccountId, UUID tradingAccountId, String name, Money balance, boolean withPortfolio);
+
     /**
      * Get the current balance for a given account.
      *

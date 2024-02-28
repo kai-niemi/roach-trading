@@ -45,10 +45,10 @@ public class Portfolio extends AbstractEntity<UUID> implements Iterable<Portfoli
     @JoinColumn(name = "account_id")
     private TradingAccount account;
 
-    @ElementCollection(fetch = FetchType.LAZY)
+    @ElementCollection
     @CollectionTable(name = "portfolio_item",
             joinColumns = @JoinColumn(name = "account_id"))
-    @OrderColumn(name = "item_pos")
+    @OrderColumn(name = "item_pos", updatable = false, nullable = false)
     private List<PortfolioItem> items = new ArrayList<>();
 
     @Column
