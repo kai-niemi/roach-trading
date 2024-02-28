@@ -64,7 +64,7 @@ public class AccountServiceTest extends AbstractIntegrationTest {
         Account a1 = accountService.getSystemAccountById(TestDoubles.SYSTEM_ACCOUNT_A);
         assertEquals(Money.euro("10000000.00"), a1.getBalance());
 
-        Account a2 = accountService.getTradingAccountById(TestDoubles.USER_ACCOUNT_ALICE, FetchType.LAZY);
+        Account a2 = accountService.getTradingAccountById(TestDoubles.USER_ACCOUNT_ALICE, false);
         assertEquals(Money.euro("1500.00"), a2.getBalance());
     }
 }

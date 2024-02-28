@@ -2,9 +2,6 @@ package io.roach.trading.domain.account;
 
 import java.util.UUID;
 
-import jakarta.persistence.FetchType;
-
-import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,6 +13,7 @@ import io.roach.trading.annotation.TransactionMandatory;
 import io.roach.trading.api.support.Money;
 import io.roach.trading.domain.portfolio.Portfolio;
 import io.roach.trading.domain.portfolio.PortfolioRepository;
+import jakarta.persistence.FetchType;
 
 @Service
 @TransactionMandatory
@@ -57,7 +55,7 @@ public class AccountServiceImpl implements AccountService {
         TradingAccount tradingAccount = new TradingAccount(tradingAccountId, name, balance, parentAccount);
         tradingAccountRepository.save(tradingAccount);
 
-        Portfolio portfolio = new Portfolio(tradingAccount);
+        Portfolio portfolio = tradingAccount.createPortfolio();
         portfolio.setDescription("Portfolio for " + tradingAccount.getName());
         portfolioRepository.save(portfolio);
 
@@ -80,21 +78,25 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public TradingAccount getTradingAccountById(UUID id, FetchType fetchType) {
+    public TradingAccount getTradingAccountById(UUID id, boolean fetchPortfolio) {
         Assert.notNull(id, "Account id is null");
 
-        TradingAccount a = tradingAccountRepository.findById(id)
-                .orElseThrow(() -> new NoSuchTradingAccountException(id));
-        if (FetchType.EAGER.equals(fetchType)) {
-            Hibernate.initialize(a.getPortfolio());
-            Hibernate.initialize(a.getPortfolio().getItems());
+        if (fetchPortfolio) {
+            return tradingAccountRepository.findByIdWithPortfolio(id)
+                    .orElseThrow(() -> new NoSuchTradingAccountException(id));
         }
-        return a;
+        return tradingAccountRepository.findById(id)
+                .orElseThrow(() -> new NoSuchTradingAccountException(id));
     }
 
     @Override
     public Page<TradingAccount> findTradingAccountsByPage(UUID parentId, Pageable page) {
         return tradingAccountRepository.findAccountsByPage(parentId, page);
+    }
+
+    @Override
+    public Page<TradingAccount> findTradingAccountsByRandom(Pageable page) {
+        return tradingAccountRepository.findAccountsByRandom(page);
     }
 
     @Override

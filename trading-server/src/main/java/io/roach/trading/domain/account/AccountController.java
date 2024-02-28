@@ -89,8 +89,7 @@ public class AccountController {
 
     @GetMapping(value = "/trading/{id}")
     public ResponseEntity<EntityModel<TradingAccount>> getTradingAccount(@PathVariable("id") UUID id) {
-        FetchType fetchType = ZoomExpression.fromCurrentRequest().containsRel(LinkRelations.PORTFOLIO_REL)
-                ? FetchType.EAGER : FetchType.LAZY;
+        boolean fetchType = ZoomExpression.fromCurrentRequest().containsRel(LinkRelations.PORTFOLIO_REL);
         return ResponseEntity.ok(tradingAccountResourceAssembler
                 .toModel(accountService.getTradingAccountById(id, fetchType)));
     }

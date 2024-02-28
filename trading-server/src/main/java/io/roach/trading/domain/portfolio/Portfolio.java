@@ -1,25 +1,36 @@
 package io.roach.trading.domain.portfolio;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Spliterator;
 import java.util.UUID;
 import java.util.function.Consumer;
-
-import jakarta.persistence.*;
+import java.util.stream.Stream;
 
 import org.springframework.hateoas.server.core.Relation;
 import org.springframework.util.Assert;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import io.roach.trading.api.support.Money;
 import io.roach.trading.domain.account.Account;
 import io.roach.trading.domain.account.TradingAccount;
 import io.roach.trading.domain.common.AbstractEntity;
 import io.roach.trading.domain.home.LinkRelations;
 import io.roach.trading.domain.product.Product;
-import io.roach.trading.api.support.Money;
+import jakarta.persistence.CollectionTable;
+import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.MapsId;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.OrderColumn;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "portfolio")
@@ -37,7 +48,7 @@ public class Portfolio extends AbstractEntity<UUID> implements Iterable<Portfoli
 
     @ElementCollection
     @CollectionTable(name = "portfolio_item", joinColumns = @JoinColumn(name = "account_id"))
-//    @org.hibernate.annotations.Fetch(org.hibernate.annotations.FetchMode.SUBSELECT)
+    @org.hibernate.annotations.Fetch(org.hibernate.annotations.FetchMode.SUBSELECT)
     @OrderColumn(name = "item_pos")
     private List<PortfolioItem> items = new ArrayList<>();
 
@@ -54,18 +65,14 @@ public class Portfolio extends AbstractEntity<UUID> implements Iterable<Portfoli
         this.account.setPortfolio(this);
     }
 
-    public void setAccount(TradingAccount account) {
-        this.account = account;
-    }
-
-    public List<PortfolioItem> getItems() {
-        return items;
-    }
-
     @Override
     @JsonIgnore
     public UUID getId() {
         return id;
+    }
+
+    public List<PortfolioItem> getItems() {
+        return Collections.unmodifiableList(items);
     }
 
     public Portfolio addItem(Product product, int quantity) {

@@ -42,7 +42,9 @@ public interface AccountService {
 
     SystemAccount getSystemAccountById(UUID id);
 
-    TradingAccount getTradingAccountById(UUID id, FetchType fetchType);
+    TradingAccount getTradingAccountById(UUID id, boolean fetchPortfolio);
+
+    Page<TradingAccount> findTradingAccountsByRandom(Pageable page);
 
     Page<TradingAccount> findTradingAccountsByPage(UUID parentId, Pageable page);
 

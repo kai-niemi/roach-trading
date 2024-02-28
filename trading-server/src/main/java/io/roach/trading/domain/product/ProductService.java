@@ -16,4 +16,5 @@ public interface ProductService {
     Product getProductByRef(String productRef) throws NoSuchProductException;
 
     Page<Product> findProductsPage(Pageable page);
+    Page<Product> findProductsByRandom(Pageable page);
 }

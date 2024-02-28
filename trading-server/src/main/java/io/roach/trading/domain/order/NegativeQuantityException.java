@@ -8,7 +8,7 @@ import io.roach.trading.domain.common.BusinessException;
 
 @ResponseStatus(value = HttpStatus.PRECONDITION_FAILED, reason = "Negative quantity")
 public class NegativeQuantityException extends BusinessException {
-    public NegativeQuantityException(String productRef) {
-        super("Negative product quantity in portfolio for: " + productRef);
+    public NegativeQuantityException(String message) {
+        super(message);
     }
 }

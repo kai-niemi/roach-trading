@@ -121,7 +121,13 @@ public class OrderServiceImpl implements OrderService {
             case SELL:
                 Integer qty = portfolioRepository.sumQuantityByProductId(portfolio.getId(), product.getId());
                 if (qty == null || qty - request.getQuantity() < 0) {
-                    throw new NegativeQuantityException(request.getProductRef());
+                    throw new NegativeQuantityException("Negative portfolio balance (%d-%d=%d) for product %s (%s)"
+                            .formatted(
+                                    qty,
+                                    request.getQuantity(),
+                                    qty - request.getQuantity(),
+                                    product.getId(),
+                                    product.getReference()));
                 }
                 portfolio.addItem(product, -request.getQuantity());
                 break;

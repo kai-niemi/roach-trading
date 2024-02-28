@@ -37,6 +37,11 @@ public class ProductServiceImpl implements ProductService, ChangeFeedListener {
     }
 
     @Override
+    public Page<Product> findProductsByRandom(Pageable page) {
+        return productRepository.findAllByRandom(page);
+    }
+
+    @Override
     public Product getProductByRef(String productRef) {
         return productRepository.getByReference(productRef)
                 .orElseThrow(() -> new NoSuchProductException(productRef));

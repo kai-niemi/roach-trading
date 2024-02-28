@@ -58,16 +58,17 @@ public class TradingAccount extends Account {
         return parentAccount;
     }
 
-    public Account setPortfolio(Portfolio portfolio) {
-        this.portfolio = portfolio;
-        if (portfolio != null) {
-            this.portfolio.setAccount(this);
-        }
-        return this;
+    public Portfolio createPortfolio() {
+        this.portfolio = new Portfolio(this);
+        return portfolio;
     }
 
     public Portfolio getPortfolio() {
         return portfolio;
+    }
+
+    public void setPortfolio(Portfolio portfolio) {
+        this.portfolio = portfolio;
     }
 
     @Override

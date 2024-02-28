@@ -58,7 +58,8 @@ public class DoublesService {
         String isolationLevel = jdbcTemplate.queryForObject("SHOW transaction_isolation", String.class);
         logger.info("Reported isolation level: " + isolationLevel);
 
-        accountService.createSystemAccount(TestDoubles.SYSTEM_ACCOUNT_A, "TRADER:A", TestDoubles.TRADER_INITIAL_BALANCE);
+        accountService.createSystemAccount(TestDoubles.SYSTEM_ACCOUNT_A,
+                "TRADER:A", TestDoubles.TRADER_INITIAL_BALANCE);
 
         accountService.createTradingAccount(TestDoubles.SYSTEM_ACCOUNT_A, TestDoubles.USER_ACCOUNT_ALICE,
                 "ALICE", TestDoubles.USER_INITIAL_BALANCE);
