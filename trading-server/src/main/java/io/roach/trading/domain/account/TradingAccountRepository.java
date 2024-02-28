@@ -24,10 +24,10 @@ public interface TradingAccountRepository extends JpaRepository<TradingAccount, 
     @Query(value = "from TradingAccount where id=?1")
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     // Not supported in Hibernate :/
-    @QueryHints(value = {
-            @QueryHint(name = "javax.persistence.lock.timeout", value = "1000"),
-            @QueryHint(name = "javax.persistence.lock.scope", value = "EXTENDED")},
-            forCounting = false)
+//    @QueryHints(value = {
+//            @QueryHint(name = "javax.persistence.lock.timeout", value = "1000"),
+//            @QueryHint(name = "javax.persistence.lock.scope", value = "EXTENDED")},
+//            forCounting = false)
     Optional<TradingAccount> getByIdForUpdate(UUID id);
 
     @Query(value = "from TradingAccount ta "

@@ -21,10 +21,10 @@ import jakarta.persistence.QueryHint;
 public interface SystemAccountRepository extends JpaRepository<SystemAccount, UUID> {
     @Query(value = "from SystemAccount where id=?1")
     @Lock(LockModeType.PESSIMISTIC_WRITE)
-    @QueryHints(value = {
-            @QueryHint(name = "javax.persistence.lock.timeout", value = "1000"),
-            @QueryHint(name = "javax.persistence.lock.scope", value = "EXTENDED")},
-            forCounting = false)
+//    @QueryHints(value = {
+//            @QueryHint(name = "javax.persistence.lock.timeout", value = "1000"),
+//            @QueryHint(name = "javax.persistence.lock.scope", value = "EXTENDED")},
+//            forCounting = false)
     Optional<SystemAccount> getByIdForUpdate(UUID id);
 
     @Query("SELECT a.balance FROM SystemAccount a WHERE a.id = :id")

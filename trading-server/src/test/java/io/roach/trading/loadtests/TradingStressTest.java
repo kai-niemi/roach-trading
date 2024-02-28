@@ -46,9 +46,9 @@ import io.roach.trading.util.RandomData;
 import static io.roach.trading.api.support.Money.euro;
 
 //@ActiveProfiles({ProfileNames.PSQL_LOCAL_RC})
-//@ActiveProfiles({ProfileNames.PSQL_LOCAL, ProfileNames.VERBOSE})
-//@ActiveProfiles({ProfileNames.CRDB_LOCAL_RC, ProfileNames.VERBOSE})
-@ActiveProfiles({ProfileNames.CRDB_LOCAL})
+@ActiveProfiles({ProfileNames.PSQL_LOCAL})
+//@ActiveProfiles({ProfileNames.CRDB_LOCAL_RC})
+//@ActiveProfiles({ProfileNames.CRDB_LOCAL})
 @Tag("stress")
 public class TradingStressTest extends AbstractIntegrationTest {
     private static final int NUM_THREADS = Runtime.getRuntime().availableProcessors() * 2;

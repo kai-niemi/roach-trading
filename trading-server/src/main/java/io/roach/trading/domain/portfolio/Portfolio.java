@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Spliterator;
 import java.util.UUID;
 import java.util.function.Consumer;
-import java.util.stream.Stream;
 
 import org.springframework.hateoas.server.core.Relation;
 import org.springframework.util.Assert;
@@ -46,9 +45,9 @@ public class Portfolio extends AbstractEntity<UUID> implements Iterable<Portfoli
     @JoinColumn(name = "account_id")
     private TradingAccount account;
 
-    @ElementCollection
-    @CollectionTable(name = "portfolio_item", joinColumns = @JoinColumn(name = "account_id"))
-    @org.hibernate.annotations.Fetch(org.hibernate.annotations.FetchMode.SUBSELECT)
+    @ElementCollection(fetch = FetchType.LAZY)
+    @CollectionTable(name = "portfolio_item",
+            joinColumns = @JoinColumn(name = "account_id"))
     @OrderColumn(name = "item_pos")
     private List<PortfolioItem> items = new ArrayList<>();
 

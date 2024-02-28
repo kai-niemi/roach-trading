@@ -3,8 +3,10 @@ package io.roach.trading.domain.order;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -78,7 +80,9 @@ public class OrderServiceImpl implements OrderService {
                 .orElseThrow(() -> new NoSuchSystemAccountException(tradingAccount.getParentAccountId(),
                         tradingAccount.getId()));
 
-        updatePortfolio(request, product, tradingAccount);
+        Portfolio portfolio = tradingAccount.getPortfolio();
+
+        updatePortfolio(request, product, portfolio);
 
         return createOrder(request, product, tradingAccount, systemAccount);
     }
@@ -110,22 +114,29 @@ public class OrderServiceImpl implements OrderService {
         }
     }
 
-    private void updatePortfolio(OrderRequest request, Product product, TradingAccount tradingAccount) {
-        Portfolio portfolio = tradingAccount.getPortfolio();
-
+    private void updatePortfolio(OrderRequest request, Product product, Portfolio portfolio) {
         switch (request.getOrderType()) {
             case BUY:
                 Assert.isTrue(request.getQuantity() > 0, "Negative quantity");
                 portfolio.addItem(product, request.getQuantity());
                 break;
             case SELL:
-                Integer qty = portfolioRepository.sumQuantityByProductId(portfolio.getId(), product.getId());
-                if (qty == null || qty - request.getQuantity() < 0) {
+                AtomicInteger qty = new AtomicInteger();
+
+                portfolio
+                        .getItems()
+                        .stream()
+                        .filter(portfolioItem ->
+                                Objects.requireNonNull(portfolioItem.getProduct().getId()).equals(product.getId()))
+                        .forEach(portfolioItem -> qty.addAndGet(portfolioItem.getQuantity()));
+
+//                Integer qty = portfolioRepository.sumQuantityByProductId(portfolio.getId(), product.getId());
+                if (qty.get() - request.getQuantity() < 0) {
                     throw new NegativeQuantityException("Negative portfolio balance (%d-%d=%d) for product %s (%s)"
                             .formatted(
-                                    qty,
+                                    qty.get(),
                                     request.getQuantity(),
-                                    qty - request.getQuantity(),
+                                    qty.get() - request.getQuantity(),
                                     product.getId(),
                                     product.getReference()));
                 }
