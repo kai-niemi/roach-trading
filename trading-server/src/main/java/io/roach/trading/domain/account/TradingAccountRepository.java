@@ -6,11 +6,13 @@ import java.util.UUID;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import io.roach.trading.api.support.Money;
+import jakarta.persistence.LockModeType;
 
 @Repository
 public interface TradingAccountRepository extends JpaRepository<TradingAccount, UUID> {
@@ -18,13 +20,13 @@ public interface TradingAccountRepository extends JpaRepository<TradingAccount, 
     Integer nextSeqNumber();
 
     @Query(value = "from TradingAccount where id=?1")
-//    @Lock(LockModeType.PESSIMISTIC_READ)
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
         // Not supported :/
 //    @QueryHints(value = {
 //            @QueryHint(name = "javax.persistence.lock.timeout", value = "1000"),
 //            @QueryHint(name = "javax.persistence.lock.scope", value = "EXTENDED")},
 //            forCounting = false)
-    Optional<TradingAccount> getByIdMaybe(UUID id);
+    Optional<TradingAccount> getByIdForUpdate(UUID id);
 
     @Query(value = "from TradingAccount ta ",
 //            + "left join fetch ta.portfolio po "

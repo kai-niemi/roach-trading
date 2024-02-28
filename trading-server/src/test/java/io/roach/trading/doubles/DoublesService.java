@@ -67,11 +67,8 @@ public class DoublesService {
         accountService.createTradingAccount(TestDoubles.SYSTEM_ACCOUNT_A, TestDoubles.USER_ACCOUNT_BOBBY_TABLES,
                 "BOBBY_TABLES", TestDoubles.USER_INITIAL_BALANCE);
 
-        Arrays.stream(TestDoubles.ALL_PRODUCTS).forEachOrdered(product -> productService.create(product));
-
-//        tradingAccountRepository.findAll().forEach(tradingAccount -> {
-//            logger.info(tradingAccount.toString());
-//        });
+        Arrays.stream(TestDoubles.ALL_PRODUCTS)
+                .forEachOrdered(product -> productService.create(product));
     }
 
     @Transactional

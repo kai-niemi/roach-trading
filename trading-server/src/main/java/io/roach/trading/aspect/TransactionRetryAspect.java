@@ -102,7 +102,8 @@ public class TransactionRetryAspect {
             if (cause instanceof SQLException) {
                 SQLException sqlException = (SQLException) cause;
                 meterRegistry.counter("trade.txt.error." + sqlException.getSQLState()).increment();
-                if ("40001".equals(sqlException.getSQLState())) { // Transient error code
+                if ("40001".equals(sqlException.getSQLState())
+                        || "40P01".equals(sqlException.getSQLState())) { // Transient error code
                     handleTransientException(sqlException, numCalls, pjp.getSignature().toShortString(),
                             retryable.maxBackoff());
                     continue;

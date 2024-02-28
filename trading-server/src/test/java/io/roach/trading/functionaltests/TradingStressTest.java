@@ -1,6 +1,7 @@
 package io.roach.trading.functionaltests;
 
 import io.roach.trading.AbstractIntegrationTest;
+import io.roach.trading.ProfileNames;
 import io.roach.trading.api.OrderRequest;
 import io.roach.trading.api.support.Money;
 import io.roach.trading.domain.account.AccountService;
@@ -17,6 +18,7 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.Commit;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 import org.springframework.transaction.support.TransactionTemplate;
@@ -30,9 +32,13 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.stream.IntStream;
 
+@ActiveProfiles({ProfileNames.PSQL_LOCAL_RC, ProfileNames.VERBOSE})
+//@ActiveProfiles({ProfileNames.PSQL_LOCAL, ProfileNames.VERBOSE})
+//@ActiveProfiles({ProfileNames.CRDB_LOCAL_RC, ProfileNames.VERBOSE})
+//@ActiveProfiles({ProfileNames.CRDB_LOCAL, ProfileNames.VERBOSE})
 @Tag("stress")
 public class TradingStressTest extends AbstractIntegrationTest {
-    private static final int ORDERS_PER_THREAD = 5;
+    private static final int ORDERS_PER_THREAD = 15;
 
     private static final int QTY_PER_ORDER = 10;
 

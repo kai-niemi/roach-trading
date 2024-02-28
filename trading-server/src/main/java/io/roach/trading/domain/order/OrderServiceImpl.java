@@ -71,10 +71,10 @@ public class OrderServiceImpl implements OrderService {
 
         validateOrder(request, product);
 
-        TradingAccount tradingAccount = tradingAccountRepository.findById(request.getBookingAccountId())
+        TradingAccount tradingAccount = tradingAccountRepository.getByIdForUpdate(request.getBookingAccountId())
                 .orElseThrow(() -> new NoSuchTradingAccountException(request.getBookingAccountId()));
 
-        SystemAccount systemAccount = systemAccountRepository.findById(tradingAccount.getParentAccountId())
+        SystemAccount systemAccount = systemAccountRepository.getByIdForUpdate(tradingAccount.getParentAccountId())
                 .orElseThrow(() -> new NoSuchSystemAccountException(tradingAccount.getParentAccountId(),
                         tradingAccount.getId()));
 
